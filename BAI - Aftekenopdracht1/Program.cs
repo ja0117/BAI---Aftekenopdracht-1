@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BAI
 {
@@ -13,18 +14,21 @@ namespace BAI
         /// <param name="lijst">De lijst die wordt doorlopen
         /// (wordt in functie veranderd)</param>
         /// ------------------------------------------------------------
-        public static void Opdr1FilterList(List<int> lijst)
-        {
+        public static void Opdr1FilterList(List<int> lijst) {
+            // Nieuwe dictionary aanmaken & initialiseren
             Dictionary<int, int> numbersList = new Dictionary<int, int>();
             int i = 0;
 
+            // Alle items uit list in dictionary stoppen
             foreach (int number in lijst) {
                 numbersList.Add(i, number);
                 i++;
             }
 
+            // Nieuwe lijst aanmaken voor opslaan dubbele getallen
             List<int> newList = new List<int>();
 
+            // Opslaan van dubbele getallen in de nieuwe lijst
             foreach (KeyValuePair<int, int> numbers in numbersList) {
                 foreach (KeyValuePair<int, int> numbers2 in numbersList) {
                     if ((numbers.Key != numbers2.Key) && (numbers.Value == numbers2.Value)) {
@@ -33,31 +37,12 @@ namespace BAI
                 }
             }
 
-            List<int> newList2 = new List<int>();
-
-            foreach (int number in lijst) {
-                int z = 0;
-                foreach (int number2 in newList) {
-                    if (number == number2) {
-                        z = 1;
-                    }
-                }
-
-                if (z == 1) {
-                    newList2.Add(number);
+            // Verwijder enkele getallen uit de lijst
+            foreach (KeyValuePair<int, int> numbers in numbersList) {
+                if (!newList.Contains(numbers.Value)) {
+                    lijst.Remove(numbers.Value);
                 }
             }
-            lijst.Clear();
-
-            foreach (int number in newList2) {
-                lijst.Add(number);
-            }
-
-            foreach (int number in lijst) {
-                Console.Write($"{number} ");
-            }
-
-            Console.WriteLine(" ");
         }
 
 
@@ -122,7 +107,7 @@ namespace BAI
             Random rand = new Random();
             for (int i = 0; i < count; i++)
             {
-                // rand.Next will only return numbers in between x & y
+                // rand.Next will only return numbers in between x & y, so we have to +1 upper limit
                 int randomNumber = rand.Next(lower, upper + 1);
                 if (stack.Contains(randomNumber))
                 {
